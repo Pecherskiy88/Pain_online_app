@@ -13,13 +13,24 @@ import '../styles/toolbar.scss';
 
 const Toolbar = () => {
 	const handleBrush = (SelectTool) => {
-		toolsState.setTool(new SelectTool(canvasState.canvas));
+		const { canvas, socket, sessionId } = canvasState;
+		toolsState.setTool(new SelectTool(canvas, socket, sessionId));
 	};
 
 	const handleChangeColor = (e) => {
 		const { value } = e.target;
 		toolsState.setStrokeColor(value);
 		toolsState.setFillColor(value);
+	};
+
+	const download = () => {
+		const dataUrl = canvasState.canvas.toDataURL();
+		const a = document.createElement('a');
+		a.href = dataUrl;
+		a.download = canvasState.sessionId + '.jpg';
+		document.body.appendChild(a);
+		a.click();
+		document.body.removeChild(a);
 	};
 
 	return (
@@ -32,7 +43,7 @@ const Toolbar = () => {
 			<input onChange={(e) => handleChangeColor(e)} type="color" style={{ marginRight: '10px' }} />
 			<button className="toolbar__btn undo" onClick={() => canvasState.undo()} />
 			<button className="toolbar__btn redo" onClick={() => canvasState.redo()} />
-			<button className="toolbar__btn save" />
+			<button className="toolbar__btn save" onClick={() => download()} />
 		</div>
 	);
 };
