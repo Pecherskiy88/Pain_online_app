@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import Canvas from './components/Canvas';
 import Settingsbar from './components/Settingsbar';
@@ -8,11 +9,18 @@ import './styles/app.scss';
 
 const App = () => {
 	return (
-		<div className="app">
-			<Toolbar />
-			<Settingsbar />
-			<Canvas />
-		</div>
+		<BrowserRouter>
+			<div className="app">
+				<Switch>
+					<Route path="/:id">
+						<Toolbar />
+						<Settingsbar />
+						<Canvas />
+					</Route>
+					<Redirect to={`f${(+new Date()).toString()}`} />
+				</Switch>
+			</div>
+		</BrowserRouter>
 	);
 };
 
